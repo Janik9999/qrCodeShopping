@@ -3,10 +3,24 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 var video;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const text1 = urlParams.get('text1')
-const text1_color_front=urlParams.get('text1_color_front');
-const text1_color_back=urlParams.get('text1_color_back');
-const text1_font=urlParams.get('text1_font');
+
+//t1
+const t1_text = urlParams.get('t1_text');
+const t1_color_front=urlParams.get('t1_color_front');
+const t1_color_back=urlParams.get('t1_color_back');
+const t1_x=(parseInt(urlParams.get('t1_x'))-10);
+const t1_y=(parseInt(urlParams.get('t1_y'))*-1)+16;
+const t1_font=urlParams.get('t1_font');
+
+//t2
+
+const t2_text = urlParams.get('t2_text');
+const t2_font=urlParams.get('t2_font');
+const t2_color_front=urlParams.get('t2_color_front');
+const t2_color_back=urlParams.get('t2_color_back');
+const t2_x=(parseInt(urlParams.get('t2_x'))-10);
+const t2_y=(parseInt(urlParams.get('t2_y'))*-1)+16;
+
 
 export function startStarWarsScene() {
     // SCENE
@@ -15,9 +29,9 @@ export function startStarWarsScene() {
     // CAMERA
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // INIT CAMERA
-    // camera.position.z = 45;
-    // camera.position.x = 3;
-    // camera.position.y = 20;
+    camera.position.z = 0;
+    camera.position.x = 0;
+    camera.position.y = 0;
 
     // RENDERER
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -66,16 +80,13 @@ let video: HTMLVideoElement | null  = document.querySelector('video');
 
     // TEXT
     const loader = new THREE.FontLoader();
-
     var starWarsText: THREE.Mesh;
-    loader.load('./fonts/'+text1_font+'.json', function (font: THREE.Font) {
-
-
-        const geometry = new THREE.TextGeometry(text1, {
+    loader.load('./fonts/'+t1_font+'.json', function (font: THREE.Font) {
+        const geometry = new THREE.TextGeometry(t1_text, {
             font: font,
             size: 2,
             height: 1,
-            curveSegments: 20,
+            curveSegments: 10,
             bevelEnabled: false,
             bevelOffset: 0,
             bevelSegments: 1,
@@ -83,14 +94,39 @@ let video: HTMLVideoElement | null  = document.querySelector('video');
             bevelThickness: 1
         });
         const materials = [
-            new THREE.MeshPhongMaterial({ color: parseInt(text1_color_front, 16)}), // front
-            new THREE.MeshPhongMaterial({ color: parseInt(text1_color_back, 16)}) // side
+            new THREE.MeshPhongMaterial({ color: parseInt(t1_color_front, 16)}), // front
+            new THREE.MeshPhongMaterial({ color: parseInt(t1_color_back, 16)}) // side
         ];
         starWarsText = new THREE.Mesh(geometry, materials);
         starWarsText.castShadow = true
-        starWarsText.position.z = -40
-        starWarsText.position.y = 0
-        starWarsText.position.x = -5
+        starWarsText.position.z = -50
+        starWarsText.position.y = t1_y
+        starWarsText.position.x = t1_x
+        //starWarsText.rotation.x = - Math.PI / 4
+        scene.add(starWarsText)
+    });
+    //Text 2
+    loader.load('./fonts/'+t2_font+'.json', function (font: THREE.Font) {
+        const geometry = new THREE.TextGeometry(t2_text, {
+            font: font,
+            size: 2,
+            height: 1,
+            curveSegments: 10,
+            bevelEnabled: false,
+            bevelOffset: 0,
+            bevelSegments: 1,
+            bevelSize: 0.3,
+            bevelThickness: 1
+        });
+        const materials = [
+            new THREE.MeshPhongMaterial({ color: parseInt(t2_color_front, 16)}), // front
+            new THREE.MeshPhongMaterial({ color: parseInt(t2_color_back, 16)}) // side
+        ];
+        starWarsText = new THREE.Mesh(geometry, materials);
+        starWarsText.castShadow = true
+        starWarsText.position.z = -50
+        starWarsText.position.y = t2_y
+        starWarsText.position.x = t2_x
         //starWarsText.rotation.x = - Math.PI / 4
         scene.add(starWarsText)
     });
