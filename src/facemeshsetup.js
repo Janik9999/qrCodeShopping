@@ -1,17 +1,26 @@
 // Camera setup function - returns a Promise so we have to call it in an async function
-async function setupCamera() {
+async function setupCamera(deviceId=undefined) {
     // Find the video element on our HTML page
     video = document.getElementById('video');
     
     // Request the front-facing camera of the device
-    const stream = await navigator.mediaDevices.getUserMedia({
+    let constraints = 
+    deviceId?
+    {
+        'audio': false,
+        'video':{
+            deviceId:deviceId
+        }
+    }
+    :{
         'audio': false,
         'video': {
           facingMode: 'user',
           height: {ideal:1920},
           width: {ideal: 1920},
         },
-      });
+      };
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = stream;
     
     // Handle the video stream once it loads.

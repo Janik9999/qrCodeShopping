@@ -18,6 +18,56 @@
 
 	<!-- Our code goes in here -->
     <script src="facemeshsetup.js"></script>
+
+    <script>
+
+
+      async function selectChangeHandler(e){
+        await setupCamera(e.target.options[e.target.selectedIndex].value);
+        document.getElementById('video').play();
+      }
+      const populateCamSelect = ()=>{
+        navigator.mediaDevices.enumerateDevices().then((mediaDevices)=>{
+          let count = 1;
+          const select = document.getElementById('camSelect');
+          select.innerHTML = "";
+          let option = document.createElement('option');
+          option.setAttribute('value',"");
+          option.textContent = "select Camera";
+          select.appendChild(option);
+          mediaDevices.forEach(mediaDevice => {
+              if (mediaDevice.kind === 'videoinput') {
+                  const option = document.createElement('option');
+                  const label = mediaDevice.label || `Camera ${count++}`;
+                  option.setAttribute('value',mediaDevice.deviceId);
+                  option.textContent = label;
+                  select.appendChild(option);
+              }
+          });
+          select.style.display="block";
+        })
+      }
+      window.addEventListener('load',()=>{
+        document.getElementById('camSelectButton').addEventListener('click',populateCamSelect);
+        document.getElementById('camSelect').addEventListener('change',selectChangeHandler);});
+    </script>
+    <style>
+      #camSelectButton{
+        position:absolute;
+        top: 90vh;
+        margin-left:50vw;
+        margin-right:50vw;
+        z-index:100;
+      }
+      #camSelect{
+        position:absolute;
+        display:none;
+        top:95vh;
+        margin-left:50vw;
+        margin-right:50vw;
+        z-index:100;
+      }
+    </style>
 </head>
 	
 <body style="background-color:ghostwhite;">
@@ -33,6 +83,13 @@
 		height: auto;
     display: none;">
 	</video>
+
+  <button id="camSelectButton" type="button" action="populateCamSelect">
+    Andere Kamera auswählen
+  </button>
+  <select name="camSelect" id="camSelect">
+
+  </select>
 <script src="index.js"></script>
 </body>
 </html>
