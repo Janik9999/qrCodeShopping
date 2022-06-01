@@ -15,7 +15,7 @@ async function setupCamera(deviceId=undefined) {
     :{
         'audio': false,
         'video': {
-          facingMode: 'user',
+          facingMode: 'environment',
           height: {ideal:1920},
           width: {ideal: 1920},
         },
