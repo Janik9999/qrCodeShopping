@@ -21,11 +21,19 @@ const t2_color_back=urlParams.get('t2_color_back');
 const t2_x=(parseInt(urlParams.get('t2_x'))-10);
 const t2_y=(parseInt(urlParams.get('t2_y'))*-1)+16;
 
+const b1_url=urlParams.get('b1_url');
+const b1_size_x=(parseInt(urlParams.get('b1_size_x')));
+const b1_size_y=(parseInt(urlParams.get('b1_size_y')));
+const b1_x=(parseInt(urlParams.get('b1_x'))-10);
+const b1_y=(parseInt(urlParams.get('b1_y'))*-1)+16;
+const b1_rotate_x=(parseInt(urlParams.get('b1_rotate_x')));
+const b1_rotate_y=(parseInt(urlParams.get('b1_rotate_y')));
+const b1_rotate_z=(parseInt(urlParams.get('b1_rotate_z')));
 
 export function startStarWarsScene() {
     // SCENE
     const scene = new THREE.Scene();
-
+    console.log(t2_text);
     // CAMERA
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // INIT CAMERA
@@ -60,18 +68,9 @@ export function startStarWarsScene() {
     loaderpic = new THREE.TextureLoader();
     loaderpic.setCrossOrigin("");
     newscene = new THREE.Scene();
-//Vid
-let video: HTMLVideoElement | null  = document.querySelector('video');
- bgTexture = new THREE.VideoTexture( video );
-    
-
-    // bgTexture = loaderpic.load("https://raw.githubusercontent.com/Rabbid76/graphics-snippets/master/resource/texture/background.jpg",
-    //     function ( texture ) {
-    //         var img = texture.image;
-    //         bgWidth= img.width;
-    //         bgHeight = img.height;
-    //     }
-    // );
+    //Vid
+    let video: HTMLVideoElement | null  = document.querySelector('video');
+    bgTexture = new THREE.VideoTexture( video );
     scene.background = bgTexture;
     bgTexture.wrapS = THREE.MirroredRepeatWrapping;
     bgTexture.wrapT = THREE.MirroredRepeatWrapping;
@@ -130,7 +129,35 @@ let video: HTMLVideoElement | null  = document.querySelector('video');
         //starWarsText.rotation.x = - Math.PI / 4
         scene.add(starWarsText)
     });
+    /* ###################################       Bild        ###################################*/
 
+    if(b1_url){
+        // Create a texture loader so we can load our image file
+        var bildloader = new THREE.TextureLoader();
+
+        // Load an image file into a custom material
+        var material = new THREE.MeshLambertMaterial({
+        map: bildloader.load(b1_url),
+        transparent: true
+        });
+        //'https://s3.amazonaws.com/duhaime/blog/tsne-webgl/assets/cat.jpg'
+        // create a plane geometry for the image with a width of 10
+        // and a height that preserves the image's aspect ratio
+        var geometry = new THREE.PlaneGeometry(b1_size_x, b1_size_y*.75);
+
+        // combine our image geometry and material into a mesh
+        var mesh = new THREE.Mesh(geometry, material);
+
+        // set the position of the image mesh in the x,y,z dimensions
+        mesh.position.set(b1_x,b1_y,-50)
+        if(b1_rotate_x)mesh.rotateX(b1_rotate_x/90);
+        if(b1_rotate_y){mesh.rotateX(b1_rotate_y/90);}
+        if(b1_rotate_z){mesh.rotateX(b1_rotate_z/90);}
+        
+
+        // add the image to the scene
+        scene.add(mesh);
+    }
 
     // ANIMATE
     function animate() {
